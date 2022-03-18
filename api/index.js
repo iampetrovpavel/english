@@ -6,8 +6,8 @@ const broker = new ServiceBroker({
     transporter: "nats://nats:4222",
 });
 
-// Load API Gateway
-broker.createService(ApiService);
+broker.createService({
+    mixins: ApiService,
+});
 
-// Start server
 broker.start();

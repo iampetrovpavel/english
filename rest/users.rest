@@ -1,1 +1,41 @@
-GET https://test.ru/users/hello
+POST https://test.ru/users/find
+
+###
+POST https://test.ru/users/hello
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluQGFkbWluLnJ1IiwiaWF0IjoxNjQ3NjA4NzgyfQ.tA1b7IUEHIpzmAWcNZpCHmDD6nQNrtWGihhxnLtwDik
+
+###
+POST https://test.ru/users/login
+Content-Type: application/json
+
+{
+    "email": "admin@admin.ru",
+    "password": "1212"
+}
+
+###
+POST https://test.ru/users/create
+Content-Type: application/json
+
+{
+    "name": "admin",
+    "email": "admin@admin.ru",
+    "password": "1212"
+}
+
+###
+POST https://test.ru/users/remove
+Content-Type: application/json
+
+{
+    "id": "6234424e1a5f6e0047f6ff45"
+}
+
+###
+POST https://test.ru/users/validate
+Content-Type: application/json
+
+{
+    "email": "admin@admin.ru",
+    "password": "1212"
+}
