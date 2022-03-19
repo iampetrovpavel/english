@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: users-depl
+  name: words-depl
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: users
+      app: words
   template:
     metadata:
       labels:
-        app: users
+        app: words
     spec:
       containers:
-        - name: users
-          image: iampetrovpavel/english-users
+        - name: words
+          image: iampetrovpavel/english-words
           env:
             - name: LOGGER
               value: "true"
@@ -25,7 +25,7 @@ spec:
             - name: TRANSPORTER
               value: http://nats:4222
             - name: MONGO_URI
-              value: 'mongodb://users-mongo:27017/users'
+              value: 'mongodb://words-mongo:27017/words'
             - name: JWT_KEY
               valueFrom:
                 secretKeyRef:

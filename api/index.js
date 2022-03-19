@@ -2,8 +2,6 @@ const { ServiceBroker } = require("moleculer");
 const ApiService = require("moleculer-web");
 const { UnAuthorizedError } = ApiService.Errors;
 const jwt = require("jsonwebtoken");
-const Cookies = require("cookies");
-var cookieParser = require('cookie-parser')
 var cookieSession = require('cookie-session')
 
 const broker = new ServiceBroker({
@@ -17,25 +15,15 @@ broker.createService({
     settings: {
         port: process.env.PORT || 3000,
         use: [
-            // cookieParser(),
             cookieSession({
                 name: 'session',
-                keys: ['key1', 'key2'],
-                maxAge: 24 * 60 * 60 * 1000 // 24 hours
+                keys: [process.env.COOKIE_KEY],
+                maxAge: 24 * 60 * 60 * 1000
             })
         ],
         routes: [{
 			path: "/api",
 			authorization: true,
-            onBeforeCall(ctx, route, req, res) {
-                console.log("COOKIES API ", req.session)
-                // req.session = null
-
-                // let cookies = new Cookies(req, res);
-                // this.logger.warn("COOKIES ", cookies.get("token"))
-                // ctx.meta.cookies2 = cookies.get("token");
-            },
-    
             onAfterCall(ctx, route, req, res, data) {
                 if (ctx.meta.cookies) {
                     req.session = ctx.meta.cookies;
@@ -47,17 +35,19 @@ broker.createService({
     methods: {
         async authorize (ctx, route, req, res) {
             let user;
-            let auth = req.headers["authorization"];
-            this.logger.warn("COOKIES2", req.session)
-            if (auth && auth.startsWith("Bearer")) {
-                let token = auth.slice(7);
-                user = await this.resolveToken(token)
+
+            if( req.session.token ) {
+                user = await this.resolveToken( req.session.token )
                 if(user) {
                     ctx.meta.user = user;
                 }
             }
+
             if (req.$action.auth == "required" && !user){
 				throw new UnAuthorizedError();
+            }
+            if (req.$action.admin == "required" && (!user || !user.groups || !user.groups.includes('admin'))){
+                throw new UnAuthorizedError();
             }
         },
         async resolveToken(token) {

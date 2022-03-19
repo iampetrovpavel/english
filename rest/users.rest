@@ -23,12 +23,22 @@ Content-Type: application/json
 }
 
 ###
+POST https://test.ru/api/users/reg
+Content-Type: application/json
+
+{
+    "name": "test",
+    "email": "test@test.ru",
+    "password": "1212"
+}
+
+###
 POST https://test.ru/api/users/create
 Content-Type: application/json
 
 {
-    "name": "admin",
-    "email": "admin@admin.ru",
+    "name": "user",
+    "email": "user@user.ru",
     "password": "1212"
 }
 
@@ -37,7 +47,7 @@ POST https://test.ru/api/users/remove
 Content-Type: application/json
 
 {
-    "id": "6234f9fc03d43e009c681edf"
+    "id": "6235fa46b45e83004a84771a"
 }
 
 ###
