@@ -1,11 +1,7 @@
-POST https://test.ru/users/find
+POST https://test.ru/api/users/find
 
 ###
-POST https://test.ru/users/hello
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluQGFkbWluLnJ1IiwiaWF0IjoxNjQ3NjA4NzgyfQ.tA1b7IUEHIpzmAWcNZpCHmDD6nQNrtWGihhxnLtwDik
-
-###
-POST https://test.ru/users/login
+POST https://test.ru/api/users/wellcome
 Content-Type: application/json
 
 {
@@ -14,7 +10,20 @@ Content-Type: application/json
 }
 
 ###
-POST https://test.ru/users/create
+POST https://test.ru/api/users/hello
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluQGFkbWluLnJ1IiwiaWF0IjoxNjQ3NjIxOTI0fQ.4IDFgm-OvtxI0oDBAJXE6BTMQwTkf-cZnZBSYGDwvwA
+
+###
+POST https://test.ru/api/users/login
+Content-Type: application/json
+
+{
+    "email": "admin@admin.ru",
+    "password": "1212"
+}
+
+###
+POST https://test.ru/api/users/create
 Content-Type: application/json
 
 {
@@ -24,11 +33,11 @@ Content-Type: application/json
 }
 
 ###
-POST https://test.ru/users/remove
+POST https://test.ru/api/users/remove
 Content-Type: application/json
 
 {
-    "id": "6234424e1a5f6e0047f6ff45"
+    "id": "6234f9fc03d43e009c681edf"
 }
 
 ###

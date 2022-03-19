@@ -1,10 +1,10 @@
 const { ServiceBroker } = require("moleculer");
 const DbService = require("moleculer-db");
 const MongooseAdapter = require("moleculer-db-adapter-mongoose");
+const { MoleculerClientError } = require("moleculer").Errors;
 const mongoose = require("mongoose");
 const { compare, genSalt, hash } =  require('bcryptjs')
 const jwt = require("jsonwebtoken");
-const authorize = require("./authorize")
 
 const broker = new ServiceBroker({
     nodeID: "node-users",
@@ -32,12 +32,6 @@ broker.createService({
             email: "string",
             password: "string"
 		},
-        authorization: true,
-        routes: [{
-            path: '/users',
-            authorization: true
-        }]
-
     },
 
     hooks: {
@@ -57,23 +51,52 @@ broker.createService({
         },
     },
 
+
     actions: {
         hello(ctx) {
-            console.log("!!!!!!!!!!!!!!!", ctx.meta)
-            return 'Hello'
+            console.log("AUTH REQUIRE ", this.actions.create.auth)
+            return 'Hello!'
         },
-        async login(ctx) {
-            const {email, password} = ctx.params;
-            const user = await this.validate(email, password)
-            console.log("!!!!!!!", user)
-            if(!user) return null
-            const userJwt = jwt.sign(user, process.env.JWT_KEY)
-            return userJwt;
+        wellcome: {
+            rest: "POST /users/login",
+            params: {
+                email: { type: "email" },
+                password: { type: "string", min: 1 }
+			},
+            async handler(ctx) {
+                const count = await ctx.call('users.count')
+                if(count === 0) {
+                    ctx.call('users.create', {
+                        name: 'admin',
+                        email: ctx.params.email,
+                        password: ctx.params.password,
+                        groups: ['admin']
+                    })
+                }
+            }
         },
-
+        create: {auth: "required"},
+        insert: {auth: "required"},
+        update: {auth: "required"},
+        remove: {auth: "required"},
+        login: {
+            rest: "POST /users/login",
+            params: {
+                email: { type: "email" },
+                password: { type: "string", min: 1 }
+			},
+            async handler(ctx) {
+                const {email, password} = ctx.params;
+                const user = await this.validateUser(email, password)
+                if(!user) throw new MoleculerClientError("Email or password is invalid!", 422, "", [{ field: "email", message: "is not found" }]);
+                const token = jwt.sign(user, process.env.JWT_KEY)
+                ctx.meta.cookies = {token}
+                return {token, email: user.email};
+            },
+        },
     },
     methods: {
-        async validate(email, password) {
+        async validateUser(email, password) {
             const user = await this.adapter.findOne({email})
             if(!user) {
                 return null
@@ -82,7 +105,6 @@ broker.createService({
             if(!isCorrectPassword) return null
             return { email: user.email }
         },
-        authorize
     }
 });
 
