@@ -5,7 +5,7 @@ const { MoleculerClientError } = require("moleculer").Errors;
 const mongoose = require("mongoose");
 const { compare, genSalt, hash } =  require('bcryptjs')
 const jwt = require("jsonwebtoken");
-const { EMAIL_PASSWORD_ERROR, EMAIL_EXIST_ERROR } = require('./constants')
+const { EMAIL_PASSWORD_ERROR, EMAIL_EXIST_ERROR, USER_NOT_FOUND } = require('./constants')
 
 const broker = new ServiceBroker({
     nodeID: "node-users",
@@ -48,7 +48,7 @@ broker.createService({
                     ctx.params.password = hashedPassword;
                     return ctx;
                 }
-            ]
+            ],
         },
     },
 
@@ -108,9 +108,25 @@ broker.createService({
                 const user = await this.validateEmail(email)
                 if( user ) throw new MoleculerClientError(EMAIL_EXIST_ERROR, 422);
                 const newUser = await ctx.call('users.create', {email, password, name})
-                const token = this.signJWT({email: newUser.email, groups: newUser.groups})
+                const token = this.signJWT({_id: newUser._id, email: newUser.email, groups: newUser.groups})
                 ctx.meta.cookies = { token }
                 return { token, email: newUser.email, groups: newUser.groups };
+            },
+        },
+        me: {
+            auth: "required",
+            async handler(ctx) {
+                const { email } = ctx.meta.user;
+                const user = await this.adapter.findOne({ email });
+                if( !user ) throw new MoleculerClientError( USER_NOT_FOUND, 422);
+                return { email: user.email, groups: user.groups, name: user.name };
+            },
+        },
+        exit: {
+            auth: "required",
+            async handler(ctx) {
+                ctx.meta.cookies = null
+                return;
             },
         }
     },
@@ -121,15 +137,16 @@ broker.createService({
                 return null
             }
             const isCorrectPassword = await compare(password, user.password)
+
             if(!isCorrectPassword) return null
-            return { email: user.email, groups: user.groups }
+            return { _id: user._id, email: user.email, groups: user.groups }
         },
         async validateEmail(email) {
             const user = await this.adapter.findOne({email})
             if(user) { return user }
             return null
         },
-        async signJWT(payload) {
+        signJWT(payload) {
             return jwt.sign(payload, process.env.JWT_KEY)
         }
     }

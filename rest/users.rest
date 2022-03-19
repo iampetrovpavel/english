@@ -1,6 +1,9 @@
 POST https://test.ru/api/users/find
 
 ###
+POST https://test.ru/api/users/me
+
+###
 POST https://test.ru/api/users/wellcome
 Content-Type: application/json
 
@@ -10,15 +13,11 @@ Content-Type: application/json
 }
 
 ###
-POST https://test.ru/api/users/hello
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluQGFkbWluLnJ1IiwiaWF0IjoxNjQ3NjIxOTI0fQ.4IDFgm-OvtxI0oDBAJXE6BTMQwTkf-cZnZBSYGDwvwA
-
-###
 POST https://test.ru/api/users/login
 Content-Type: application/json
 
 {
-    "email": "admin@admin.ru",
+    "email": "test1@test.ru",
     "password": "1212"
 }
 
@@ -28,7 +27,7 @@ Content-Type: application/json
 
 {
     "name": "test",
-    "email": "test@test.ru",
+    "email": "test222@test.ru",
     "password": "1212"
 }
 
