@@ -11,10 +11,17 @@ spec:
     - host: test.ru
       http:
         paths:
-          - path: /*
+          - path: /api/*
             pathType: Prefix
             backend:
               service: 
                 name: api-service
                 port: 
                   number: 80
+          - path: /*
+            pathType: Prefix
+            backend:
+              service: 
+                name: client-srv
+                port: 
+                  number: 8080
