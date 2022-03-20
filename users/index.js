@@ -94,7 +94,7 @@ broker.createService({
                 if(!user) throw new MoleculerClientError(EMAIL_PASSWORD_ERROR, 422);
                 const token = jwt.sign(user, process.env.JWT_KEY)
                 ctx.meta.cookies = {token}
-                return {token, email: user.email, groups: user.groups};
+                return {token, email: user.email, groups: user.groups, name: user.name};
             },
         },
         reg: {
@@ -110,7 +110,7 @@ broker.createService({
                 const newUser = await ctx.call('users.create', {email, password, name})
                 const token = this.signJWT({_id: newUser._id, email: newUser.email, groups: newUser.groups})
                 ctx.meta.cookies = { token }
-                return { token, email: newUser.email, groups: newUser.groups };
+                return { token, email: newUser.email, groups: newUser.groups, name: newUser.name };
             },
         },
         me: {
@@ -125,7 +125,7 @@ broker.createService({
         exit: {
             auth: "required",
             async handler(ctx) {
-                ctx.meta.cookies = null
+                ctx.meta.cookies = {token: ''}
                 return;
             },
         }
@@ -139,7 +139,7 @@ broker.createService({
             const isCorrectPassword = await compare(password, user.password)
 
             if(!isCorrectPassword) return null
-            return { _id: user._id, email: user.email, groups: user.groups }
+            return { _id: user._id, email: user.email, groups: user.groups, name: user.name }
         },
         async validateEmail(email) {
             const user = await this.adapter.findOne({email})

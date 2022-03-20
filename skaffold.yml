@@ -36,7 +36,3 @@ build:
       context: client
       docker:
         dockerfile: Dockerfile
-      sync:
-        manual:
-          - src: '**/*.jsx'
-            dest: .    

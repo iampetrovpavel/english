@@ -3,8 +3,8 @@ import { Form, Input, Button, Space, Card } from 'antd';
 import { Link } from "react-router-dom";
 import useReg from '../hooks/useReg'
 
-const Reg = () => {
-  const {email, handleEmail, password, handlePassword, name, handleName, reg} = useReg()
+const Reg = ({setMe}) => {
+  const {email, handleEmail, password, handlePassword, name, handleName, reg, errors} = useReg(setMe)
 
   return (
     <Card style={{ width: 320, margin:'0 auto', marginTop:'1em' }}>
@@ -20,7 +20,7 @@ const Reg = () => {
         <Form.Item
           label="Email"
           name="email"
-          rules={[{ required: true, message: 'Please input your username!' }]}
+          // rules={[{ required: true, message: 'Please input your username!' }]}
         >
           <Input onChange={handleEmail} value={email}/>
         </Form.Item>
@@ -28,7 +28,7 @@ const Reg = () => {
         <Form.Item
           label="Имя"
           name="name"
-          rules={[{ required: true, message: 'Please input your username!' }]}
+          // rules={[{ required: true, message: 'Please input your username!' }]}
         >
           <Input onChange={handleName} value={name}/>
         </Form.Item>
@@ -36,7 +36,7 @@ const Reg = () => {
         <Form.Item
           label="Password"
           name="password"
-          rules={[{ required: true, message: 'Please input your password!' }]}
+          // rules={[{ required: true, message: 'Please input your password!' }]}
         >
           <Input.Password onChange={handlePassword} value={password}/>
         </Form.Item>

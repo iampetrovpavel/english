@@ -1,15 +1,15 @@
 import { useState } from "react"
 import useRequest from "./useRequest"
 
-const useLogin = (onSuccess) => {
+const useLogin = (callback) => {
     const [email, setEmail] = useState('test@test.ru')
     const [password, setPassword] = useState('1212')
     const [login, errors, loading] = useRequest({
         url: '/api/users/login',
         method: 'post',
         body: {email, password},
-        onSuccess: (data)=>{
-            onSuccess(data)
+        onSuccess: function (data){
+            callback(data)
         }
     })
     function handleEmail(e) {

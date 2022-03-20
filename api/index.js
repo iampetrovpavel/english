@@ -13,12 +13,22 @@ broker.createService({
     name: "api",
     mixins: [ApiService],
     settings: {
+        // cors: {
+        //     origin: "*",
+        //     methods: ["GET", "OPTIONS", "POST", "PUT", "DELETE"],
+        //     allowedHeaders: [],
+        //     exposedHeaders: [],
+        //     maxAge: 3600
+        // },
         port: process.env.PORT || 3000,
         use: [
             cookieSession({
                 name: 'session',
                 keys: [process.env.COOKIE_KEY],
-                maxAge: 24 * 60 * 60 * 1000
+                maxAge: 24 * 60 * 60 * 1000,
+                httpOnly: true,
+                secure: false,
+                path: '/',
             })
         ],
         routes: [{

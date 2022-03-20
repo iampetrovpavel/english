@@ -6,7 +6,7 @@ const useReg = (onSuccess) => {
     const [name, setName] = useState('test')
     const [password, setPassword] = useState('1212')
     const [reg, errors, loading] = useRequest({
-        url: '/api/users/reg',
+        url: 'https://test.ru/api/users/reg',
         method: 'post',
         body: {email, name, password},
         onSuccess
@@ -20,7 +20,7 @@ const useReg = (onSuccess) => {
     function handlePassword(e) {
         setPassword(e.target.value)
     }
-    return {email, handleEmail, password, handlePassword, name, handleName, reg}
+    return {email, handleEmail, password, handlePassword, name, handleName, reg, errors}
 }
 
 export default useReg

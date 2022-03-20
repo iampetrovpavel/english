@@ -16,9 +16,9 @@ const plugins = [
     }),
 ]
 
-if (process.env.SERVE) {
-    plugins.push(new ReactRefreshWebpackPlugin());
-}
+// if (process.env.SERVE) {
+//     plugins.push(new ReactRefreshWebpackPlugin());
+// }
 
 module.exports = {
     mode,

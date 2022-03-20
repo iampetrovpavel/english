@@ -3,9 +3,8 @@ import { Form, Input, Button, Checkbox, Space, Card } from 'antd';
 import { Link } from "react-router-dom";
 import useLogin from '../hooks/useLogin'
 
-const Login = ({setUser}) => {
-
-  const {email, handleEmail, password, handlePassword, login} = useLogin(setUser)
+const Login = ({setMe}) => {
+  const {email, handleEmail, password, handlePassword, login} = useLogin(setMe)
 
   return (
     <Card style={{ width: 300, margin:'0 auto', marginTop:'1em' }}>
@@ -21,7 +20,7 @@ const Login = ({setUser}) => {
         <Form.Item
           label="Email"
           name="email"
-          rules={[{ required: true, message: 'Please input your username!' }]}
+          // rules={[{ required: true, message: 'Please input your username!' }]}
         >
           <Input onChange={handleEmail} value={email} />
         </Form.Item>
@@ -29,7 +28,7 @@ const Login = ({setUser}) => {
         <Form.Item
           label="Password"
           name="password"
-          rules={[{ required: true, message: 'Please input your password!' }]}
+          // rules={[{ required: true, message: 'Please input your password!' }]}
         >
           <Input.Password onChange={handlePassword} value={password}/>
         </Form.Item>
