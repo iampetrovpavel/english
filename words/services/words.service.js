@@ -32,7 +32,12 @@ module.exports = {
                 setQueryUserId
             ],
             list: [
-                setQueryUserId
+                setQueryUserId,
+                function setQueryUserId(ctx) {
+                    ctx.params.sort = {'createdAt': -1};
+                    console.log("PARAMS!!!!!!!!", ctx.params)
+                    return ctx;
+                }
             ],
             count: [
                 setQueryUserId

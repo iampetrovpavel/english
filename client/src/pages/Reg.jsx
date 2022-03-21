@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import useReg from '../hooks/useReg'
 
 const Reg = ({setMe}) => {
-  const {email, handleEmail, password, handlePassword, name, handleName, reg, errors} = useReg(setMe)
+  const {email, handleEmail, password, handlePassword, name, handleName, reg} = useReg(setMe)
 
   return (
     <Card style={{ width: 320, margin:'0 auto', marginTop:'1em' }}>
@@ -13,14 +13,11 @@ const Reg = ({setMe}) => {
         labelCol={{ span: 8 }}
         wrapperCol={{ span: 16 }}
         initialValues={{ remember: true }}
-        // onFinish={onFinish}
-        // onFinishFailed={onFinishFailed}
         autoComplete="off"
       >
         <Form.Item
           label="Email"
           name="email"
-          // rules={[{ required: true, message: 'Please input your username!' }]}
         >
           <Input onChange={handleEmail} value={email}/>
         </Form.Item>
@@ -28,7 +25,6 @@ const Reg = ({setMe}) => {
         <Form.Item
           label="Имя"
           name="name"
-          // rules={[{ required: true, message: 'Please input your username!' }]}
         >
           <Input onChange={handleName} value={name}/>
         </Form.Item>

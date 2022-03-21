@@ -19,15 +19,14 @@ const App = () => {
             navigate('/')
         }
     }, [me])
-    console.log("ME ", me)
     const RequireAuth = ({children})=>(me?children:<Navigate to="/login"/>)
     return (
-        <Layout style={{height: '100%'}}>
+        <Layout style={{height: '100%', paddingBottom: '1em'}}>
             <Header style={{padding: 0}}>
                 <Wrapper>
                     {me && <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['1']}>
                         <Menu.Item key="1"><Link to="/words">Словарь</Link></Menu.Item>
-                        {/* <Menu.Item key="2"><Link to="/play">Тренировка</Link></Menu.Item> */}
+                        <Menu.Item key="2"><Link to="/play">Тренировка</Link></Menu.Item>
                         <Menu.SubMenu key="sub1" icon={<UserOutlined />} title={me.name}>
                             <Menu.Item key="9" onClick={exit}>Выход</Menu.Item>
                         </Menu.SubMenu>

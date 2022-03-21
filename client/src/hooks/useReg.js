@@ -5,7 +5,7 @@ const useReg = (onSuccess) => {
     const [email, setEmail] = useState('test@test.ru')
     const [name, setName] = useState('test')
     const [password, setPassword] = useState('1212')
-    const [reg, errors, loading] = useRequest({
+    const [reg, errors] = useRequest({
         url: 'https://test.ru/api/users/reg',
         method: 'post',
         body: {email, name, password},

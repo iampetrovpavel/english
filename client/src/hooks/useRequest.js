@@ -5,11 +5,6 @@ const useRequest = ({ url, method, body, onSuccess, onFail}) => {
     const [errors, setErrors] = useState(null)
     const [loading, setLoading] = useState(false)
 
-    const instance = axios.create({
-        withCredentials: true,
-        // baseURL: 'http://test.ru'
-     })
-
     const doRequest = async (props = {}) => {
         try{
             setLoading(true)

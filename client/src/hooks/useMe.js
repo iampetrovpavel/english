@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import useRequest from "./useRequest"
 import { useNavigate} from "react-router-dom";
 
-const useMe = (setUser) => {
+const useMe = () => {
     const [me, setMe] = useState(null)
     const navigate = useNavigate();
     const [fetchMe, errors, loading] = useRequest({
@@ -23,7 +23,7 @@ const useMe = (setUser) => {
     useEffect(()=>{
         fetchMe()
     }, [])
-    return { me, loading, errors, setMe, exit}
+    return { me, loading, errors, setMe, exit, loading}
 }
 
 export default useMe
