@@ -4,6 +4,19 @@ const mongoose = require("mongoose");
 const setQueryUserId = require('../hooks/setQueryUserId.hook')
 const { WORD_NOT_FOUND } = require('../constants')
 const { MoleculerClientError } = require("moleculer").Errors;
+const mongoosePaginate = require('mongoose-paginate-v2');
+
+mongoose.plugin(mongoosePaginate);
+
+const wordsSchema = new mongoose.Schema({
+    word: { type: String },
+    userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+    trans: {type: [String]},
+    createdAt: {type: Date}
+})
+
+const wordsModel = mongoose.model('Word', wordsSchema)
+// wordsModel.plugin(mongoosePaginate);
 
 module.exports = {
     name: "words",
@@ -11,12 +24,7 @@ module.exports = {
 
     adapter: new MongooseAdapter(process.env.MONGO_URI),
 
-    model: mongoose.model("Word", mongoose.Schema({
-        word: { type: String },
-        userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-        trans: {type: [String]},
-        createdAt: {type: Date}
-    })),
+    model: wordsModel,
 
     settings: {
         fields: ["_id", "word", "trans", "createdAt", "userId"],
@@ -33,11 +41,6 @@ module.exports = {
             ],
             list: [
                 setQueryUserId,
-                function setQueryUserId(ctx) {
-                    ctx.params.sort = {'createdAt': -1};
-                    console.log("PARAMS!!!!!!!!", ctx.params)
-                    return ctx;
-                }
             ],
             count: [
                 setQueryUserId
@@ -57,6 +60,30 @@ module.exports = {
 
 
     actions: {
+        list: {
+            auth: "required",
+            params: {
+                page: Number
+            },
+            handler(ctx){
+                const { page = 1 } = ctx.params;
+                const myCustomLabels = {
+                    totalDocs: 'total',
+                    docs: 'rows',
+                    limit: 'pageSize',
+                    page: 'page',
+                    totalPages: 'totalPages',
+                };
+                const options = {
+                    sort: {'createdAt': -1},
+                    page,
+                    limit: 10,
+                    customLabels: myCustomLabels,
+                };
+                console.log(this.adapter.model.paginate)
+                return this.adapter.model.paginate({}, options)
+            }
+        },
         async random(ctx) {
             const count = await ctx.call('words.count')
             var random = Math.floor(Math.random() * count)

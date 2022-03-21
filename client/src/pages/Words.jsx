@@ -7,7 +7,7 @@ import useNewWord from "../hooks/useNewWord";
 
 const Words = () => {
     const { isModalVisible, showModal, handleOk, handleCancel } = useModal()
-    const { words, page, total, fetch } = useWords()
+    const { words, page, total, fetch, remove } = useWords()
     const { create, handleWordInput, handleTransInput, word, trans } = useNewWord(successCreate)
 
     function successCreate() {
@@ -36,7 +36,7 @@ const Words = () => {
                     <Input placeholder="Перевод" value={ trans } onChange={ handleTransInput }/>
                 </Space>
             </Modal>
-            {words.map(w=><Word key={w._id} item={w}/>)}
+            {words.map(w=><Word key={w._id} item={w} remove={remove}/>)}
             <Pagination 
                 defaultCurrent={1} 
                 current={page} 
@@ -49,18 +49,21 @@ const Words = () => {
     )
 }
 
-const Word = ({item}) => {
-    const {word = '...', trans = []} = item;
+const Word = ({item, remove}) => {
+    const {word = '...', trans = [], _id} = item;
     return (
-        <Card size="small" title={word} extra={<a href="#"><More/></a>} style={{ width: 300, marginTop: '1em' }}>
+        <Card size="small" title={word} extra={<More id={_id} remove={remove}/>} style={{ width: 300, marginTop: '1em' }}>
             {trans.map(t=><p key={t}>{t}</p>)}
         </Card>
     )
 }
 
-const More = () => {
+const More = ({remove, id}) => {
+    function handleRemove() {
+        remove({body:{id}})
+    }
     const menu = <Menu>
-                    <Menu.Item danger>Удалить</Menu.Item>
+                    <Menu.Item danger onClick={handleRemove}>Удалить</Menu.Item>
                 </Menu>
     return (
         <Dropdown overlay={menu}>

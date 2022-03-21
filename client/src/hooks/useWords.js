@@ -10,13 +10,20 @@ const useWords = () => {
             setData(data)
         }
     })
+    const [remove] = useRequest({
+        url: '/api/words/remove',
+        method: 'post',
+        onSuccess: () => {
+            fetch()
+        }
+    })
     useEffect(()=>{
         fetch()
     },[])
     
     const {rows:words = [], total = 0, page = 1, pageSize = 10, totalPages} = data;
 
-    return {words, total, page, pageSize, totalPages, fetch}
+    return {words, total, page, pageSize, totalPages, fetch, remove}
 }
 
 export default useWords;
