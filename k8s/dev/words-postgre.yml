@@ -1,0 +1,73 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: words-postgre
+  labels:
+    name: words-postgre
+spec:
+  selector:
+    matchLabels:
+      name: words-postgre
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        name: words-postgre
+    spec:
+      containers:
+        - image: postgres
+          name: words-postgre
+          ports:
+            - containerPort: 5432
+          env:
+            - name: POSTGRES_PASSWORD
+              value: test
+            - name: POSTGRES_USER
+              value: test
+            - name: POSTGRES_DB
+              value: words
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "250m"
+            limits:
+              memory: "128Mi"
+              cpu: "500m"
+          volumeMounts:
+            - mountPath: /data/wordsdb
+              name: postgre-data
+      restartPolicy: Always
+      volumes:
+        - name: postgre-data
+          persistentVolumeClaim:
+            claimName: postgre-data
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: postgre-data
+  labels:
+    name: postgre-data
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 100Mi
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: words-postgre
+  labels:
+    name: words-postgre
+spec:
+  ports:
+    - port: 5432
+      targetPort: 5432
+  selector:
+    name: words-postgre

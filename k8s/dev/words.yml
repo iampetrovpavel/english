@@ -24,8 +24,8 @@ spec:
             #   value: services/clients.service.js
             - name: TRANSPORTER
               value: http://nats:4222
-            - name: MONGO_URI
-              value: 'mongodb://words-mongo:27017/words'
+            - name: POSTGRE_URI
+              value: 'postgresql://words-postgre:5432/words'
             - name: JWT_KEY
               valueFrom:
                 secretKeyRef:

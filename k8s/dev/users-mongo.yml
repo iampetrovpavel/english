@@ -23,21 +23,21 @@ spec:
             - containerPort: 27017
           resources: {}
           volumeMounts:
-            - mountPath: /data/db
-              name: mongo-data
+            - mountPath: /data/usersdb
+              name: mongo
       restartPolicy: Always
       volumes:
-        - name: mongo-data
+        - name: mongo
           persistentVolumeClaim:
-            claimName: mongo-data
+            claimName: mongo
 ---
 
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: mongo-data
+  name: mongo
   labels:
-    name: mongo-data
+    name: mongo
 spec:
   accessModes:
     - ReadWriteOnce

@@ -1,36 +1,30 @@
 POST https://test.ru/api/words/find
 Content-Type: application/json
 
-{
-    "sort":"createdAt"
-}
-
 ###
 POST https://test.ru/api/words/list
 Content-Type: application/json
 
 {
     "page": 1,
-    "sort": "createdAt"
 }
 
 ###
 POST https://test.ru/api/words/random
 
 ###
-POST https://test.ru/api/users/login
-Content-Type: application/json
-
-{
-    "email": "test@test.ru",
-    "password": "1212"
-}
-
-###
 POST https://test.ru/api/words/create
 Content-Type: application/json
 
 {
-    "word": "12123123",
+    "text": "!!!!!!!!!",
     "trans": ["проверка12, проверка123"]
+}
+
+###
+POST https://test.ru/api/words/remove
+Content-Type: application/json
+
+{
+    "id": "6238a43bcf8024001e8924a1"
 }
