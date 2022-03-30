@@ -6,7 +6,7 @@ var cookieSession = require('cookie-session')
 
 const broker = new ServiceBroker({
     nodeID: "node-api",
-    transporter: "nats://nats:4222",
+    transporter: "nats://english-nats:4222",
 });
 
 broker.createService({

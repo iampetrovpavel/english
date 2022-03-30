@@ -22,7 +22,7 @@ module.exports = {
     name: "words",
     mixins: [DbService],
 
-    adapter: new MongooseAdapter(process.env.MONGO_URI),
+    adapter: new MongooseAdapter(process.env.MONGO_URI+'/'+process.env.MONGO_DB),
 
     model: wordsModel,
 
@@ -47,6 +47,7 @@ module.exports = {
             ],
             create: [
                 function addUser(ctx) {
+                    console.log("DEBUG ", ctx.params)
                     ctx.params.userId = ctx.meta.user._id
                     return ctx
                 }

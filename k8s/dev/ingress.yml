@@ -16,13 +16,13 @@ spec:
             pathType: Prefix
             backend:
               service: 
-                name: api-service
+                name: english-api-srv
                 port: 
                   number: 80
           - path: /*
             pathType: Prefix
             backend:
               service: 
-                name: client-srv
+                name: english-client-srv
                 port: 
                   number: 3000

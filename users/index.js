@@ -9,20 +9,22 @@ const { EMAIL_PASSWORD_ERROR, EMAIL_EXIST_ERROR, USER_NOT_FOUND } = require('./c
 
 const broker = new ServiceBroker({
     nodeID: "node-users",
-    transporter: "nats://nats:4222",
+    transporter: "nats://english-nats:4222",
 });
+
+const mongo_link = process.env.MONGO_URI+'/'+process.env.MONGO_DB;
 
 broker.createService({
     name: "users",
     mixins: [DbService],
 
-    adapter: new MongooseAdapter(process.env.MONGO_URI),
+    adapter: new MongooseAdapter(mongo_link),
 
     model: mongoose.model("User", mongoose.Schema({
         name: { type: String },
         email: { type: String, unique: true },
         password: { type: String},
-        createdAt: { type: Date},
+        createdAt: { type: Date, default: Date.now},
         groups: {type: [String]}
     })),
 
@@ -38,10 +40,6 @@ broker.createService({
     hooks: {
         before: {
             create: [
-                function addTimestamp(ctx) {
-                    ctx.params.createdAt = new Date();    
-                    return ctx;
-                },
                 async function hashPassword(ctx) {
                     const salt = await genSalt(10);
                     const hashedPassword = await hash(ctx.params.password, salt);
@@ -54,10 +52,6 @@ broker.createService({
 
 
     actions: {
-        hello(ctx) {
-            console.log("AUTH REQUIRE ", this.actions.create.auth)
-            return 'Hello!'
-        },
         wellcome: {
             rest: "POST /users/login",
             params: {

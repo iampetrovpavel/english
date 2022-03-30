@@ -6,7 +6,7 @@ deploy:
       - ./k8s/dev/*
 build:
   local:
-    push: false
+    push: true
   artifacts:
     - image: iampetrovpavel/english-users
       context: users
@@ -14,7 +14,7 @@ build:
         dockerfile: Dockerfile
       sync:
         manual:
-          - src: '*.js'
+          - src: '**/*.js'
             dest: .
     - image: iampetrovpavel/english-api
       context: api
@@ -22,7 +22,7 @@ build:
         dockerfile: Dockerfile
       sync:
         manual:
-          - src: '*.js'
+          - src: '**/*.js'
             dest: .
     - image: iampetrovpavel/english-words
       context: words
