@@ -6,7 +6,7 @@ const useReg = (onSuccess) => {
     const [name, setName] = useState('test')
     const [password, setPassword] = useState('1212')
     const [reg, errors] = useRequest({
-        url: 'https://test.ru/api/users/reg',
+        url: '/api/users/reg',
         method: 'post',
         body: {email, name, password},
         onSuccess

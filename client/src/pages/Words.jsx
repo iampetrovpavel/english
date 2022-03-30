@@ -63,7 +63,7 @@ const More = ({remove, id}) => {
         remove({body:{id}})
     }
     const menu = <Menu>
-                    <Menu.Item danger onClick={handleRemove}>Удалить</Menu.Item>
+                    <Menu.Item key={1} danger onClick={handleRemove}>Удалить</Menu.Item>
                 </Menu>
     return (
         <Dropdown overlay={menu}>

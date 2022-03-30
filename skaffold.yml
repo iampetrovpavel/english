@@ -30,7 +30,7 @@ build:
         dockerfile: Dockerfile
       sync:
         manual:
-          - src: '*.js'
+          - src: '**/*.js'
             dest: .
     - image: iampetrovpavel/english-client
       context: client

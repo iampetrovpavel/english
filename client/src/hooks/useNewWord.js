@@ -1,15 +1,13 @@
 import { useState } from 'react'
 import useRequest from './useRequest'
 
-const useNewWord = (done) => {
+const useNewWord = (onSuccess) => {
     const [word, setWord] = useState('')
     const [trans, setTrans] = useState('')
     const [create, errors, loading] = useRequest({
         url: '/api/words/create',
         method: 'post',
-        onSuccess: () => {
-            done()
-        }
+        onSuccess
     })
     function handleWordInput(e){
         setWord(e.target.value)

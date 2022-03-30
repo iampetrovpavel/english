@@ -18,6 +18,7 @@ const useWords = () => {
         }
     })
     useEffect(()=>{
+        console.log("use effect")
         fetch()
     },[])
     

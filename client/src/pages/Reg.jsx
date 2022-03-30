@@ -2,8 +2,12 @@ import React from "react";
 import { Form, Input, Button, Space, Card } from 'antd';
 import { Link } from "react-router-dom";
 import useReg from '../hooks/useReg'
+import { useNavigate } from 'react-router-dom'
 
-const Reg = ({setMe}) => {
+const Reg = ({me, setMe}) => {
+  const navigate = useNavigate()
+  if(me) { navigate('/words') }
+
   const {email, handleEmail, password, handlePassword, name, handleName, reg} = useReg(setMe)
 
   return (

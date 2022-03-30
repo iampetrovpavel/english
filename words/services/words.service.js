@@ -1,7 +1,7 @@
 const DbService = require("moleculer-db");
 const MongooseAdapter = require("moleculer-db-adapter-mongoose");
 const mongoose = require("mongoose");
-const setQueryUserId = require('../hooks/setQueryUserId.hook')
+const specifyUser = require('../hooks/specifyUser.hook')
 const { WORD_NOT_FOUND } = require('../constants')
 const { MoleculerClientError } = require("moleculer").Errors;
 const mongoosePaginate = require('mongoose-paginate-v2');
@@ -12,7 +12,7 @@ const wordsSchema = new mongoose.Schema({
     word: { type: String },
     userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
     trans: {type: [String]},
-    createdAt: {type: Date}
+    createdAt: {type: Date, default: Date.now}
 })
 
 const wordsModel = mongoose.model('Word', wordsSchema)
@@ -37,19 +37,15 @@ module.exports = {
     hooks: {
         before: {
             find: [
-                setQueryUserId
+                specifyUser
             ],
             list: [
-                setQueryUserId,
+                specifyUser,
             ],
             count: [
-                setQueryUserId
+                specifyUser
             ],
             create: [
-                function addTimestamp(ctx) {
-                    ctx.params.createdAt = new Date();    
-                    return ctx;
-                },
                 function addUser(ctx) {
                     ctx.params.userId = ctx.meta.user._id
                     return ctx
@@ -80,16 +76,13 @@ module.exports = {
                     limit: 10,
                     customLabels: myCustomLabels,
                 };
-                console.log(this.adapter.model.paginate)
                 return this.adapter.model.paginate({}, options)
             }
         },
         async random(ctx) {
-            const count = await ctx.call('words.count')
-            var random = Math.floor(Math.random() * count)
-            const word = await ctx.call('words.find', {offset: random})
-            if (!word || word.length === 0) { throw new MoleculerClientError(WORD_NOT_FOUND, 404);}
-            return word[0];
+            return await this.adapter.model.aggregate([
+                { '$sample': {size: 3} }
+            ]);
         },
         create: {auth: "required"},
         insert: {auth: "required"},

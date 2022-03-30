@@ -2,10 +2,11 @@ import React from "react";
 import { Form, Input, Button, Checkbox, Space, Card } from 'antd';
 import { Link } from "react-router-dom";
 import useLogin from '../hooks/useLogin'
+import { Navigate } from 'react-router-dom'
 
-const Login = ({setMe}) => {
+const Login = ({me, setMe}) => {
+  if(me) { return <Navigate to='/words' replace /> }
   const {email, handleEmail, password, handlePassword, login} = useLogin(setMe)
-
   return (
     <Card style={{ width: 300, margin:'0 auto', marginTop:'1em' }}>
       <Form
