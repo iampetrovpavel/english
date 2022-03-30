@@ -20,7 +20,6 @@ const App = () => {
             setMe(data)
         }, 
         ()=>{ navigate('/login') })
-    console.log("!!!!!!", location)
     const menu = [
         {link:'/words', name: 'Словарь'},
         {link:'/play', name: 'Тренировка'}
@@ -29,9 +28,9 @@ const App = () => {
         <Layout style={{height: '100%', paddingBottom: '1em'}}>
             <Header style={{padding: 0}}>
                 <Wrapper>
-                    {me && <Menu theme="dark" mode="horizontal" defaultSelectedKeys={1}>
-                        <Menu.Item key="1"><Link to="/words">Словарь</Link></Menu.Item>
-                        <Menu.Item key="2"><Link to="/play">Тренировка</Link></Menu.Item>
+                    {me && <Menu theme="dark" mode="horizontal" defaultSelectedKeys={location.pathname}>
+                        <Menu.Item key="/words"><Link to="/words">Словарь</Link></Menu.Item>
+                        <Menu.Item key="/play"><Link to="/play">Тренировка</Link></Menu.Item>
                         <Menu.SubMenu key="sub1" icon={<UserOutlined />} title={me.name}>
                             <Menu.Item key="9" onClick={exit}>Выход</Menu.Item>
                         </Menu.SubMenu>
@@ -41,7 +40,7 @@ const App = () => {
             <Content style={{height: '100%'}}>
                 <Wrapper>
                     <Routes>
-                        {/* <Route path="/" element={<Navigate to="/words"/>}/> */}
+                        <Route path="/" element={<Navigate to="/words"/>}/>
                         <Route path="reg" element={<Reg me={me} setMe={setMe}/>} />
                         <Route path="login" element={<Login me={me} setMe={setMe}/>}/>
                         { getProtectedRoute('words', Words, me) }

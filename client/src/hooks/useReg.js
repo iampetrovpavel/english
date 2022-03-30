@@ -3,8 +3,8 @@ import useRequest from "./useRequest"
 
 const useReg = (onSuccess) => {
     const [email, setEmail] = useState('test@test.ru')
-    const [name, setName] = useState('test')
-    const [password, setPassword] = useState('1212')
+    const [name, setName] = useState('')
+    const [password, setPassword] = useState('')
     const [reg, errors] = useRequest({
         url: '/api/users/reg',
         method: 'post',
