@@ -6,7 +6,7 @@ deploy:
       - ./k8s/dev/*
 build:
   local:
-    push: true
+    push: false
   artifacts:
     - image: iampetrovpavel/english-users
       context: users
@@ -36,3 +36,11 @@ build:
       context: client
       docker:
         dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: '**/*.jsx'
+            dest: .
+          - src: '**/*.css'
+            dest: .
+          - src: '**/*.js'
+            dest: .

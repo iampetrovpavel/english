@@ -18,7 +18,7 @@ const useLogin = (callback) => {
     function handlePassword(e) {
         setPassword(e.target.value)
     }
-    return {email, handleEmail, password, handlePassword, login}
+    return {email, handleEmail, password, handlePassword, login, errors, loading}
 }
 
 export default useLogin

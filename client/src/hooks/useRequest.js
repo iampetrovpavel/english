@@ -22,13 +22,13 @@ const useRequest = ({ url, method, body, onSuccess, onFail}) => {
             return response.data
         }
         catch(error){
-            if(!error.response || !error.response.data || !error.response.data.errors) {
-                setErrors('Что-то пошло не так...')
-                if(onFail)onFail(error)
+            if(!error.response || !error.response.data) {
+                setErrors([{message: 'Что-то пошло не так...'}])
+                if(onFail) { onFail(error); }
                 return
             }
-            setErrors(error.response.data.errors)
-            if(onFail)onFail(error.response.data.errors)
+            setErrors(error.response.data)
+            if(onFail) { onFail(error.response.data) }
         }
         finally {
             setLoading(false)

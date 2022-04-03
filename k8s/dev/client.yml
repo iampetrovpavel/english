@@ -17,10 +17,10 @@ spec:
           image: iampetrovpavel/english-client
           resources:
             requests:
-              memory: "64Mi"
+              memory: "512Mi"
               cpu: "250m"
             limits:
-              memory: "128Mi"
+              memory: "1Gi"
               cpu: "500m"
 ---
 apiVersion: v1
@@ -33,5 +33,5 @@ spec:
   ports:
     - name: english-client
       protocol: TCP
-      port: 3000
-      targetPort: 3000
+      port: 80
+      targetPort: 80

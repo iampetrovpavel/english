@@ -3,15 +3,18 @@ import { Form, Input, Button, Space, Card } from 'antd';
 import { Link } from "react-router-dom";
 import useReg from '../hooks/useReg'
 import { useNavigate } from 'react-router-dom'
+import Loading from "../components/loading.jsx";
+import Errors from "../components/errors.jsx";
 
 const Reg = ({me, setMe}) => {
   const navigate = useNavigate()
   if(me) { navigate('/words') }
 
-  const {email, handleEmail, password, handlePassword, name, handleName, reg} = useReg(setMe)
+  const {email, handleEmail, password, handlePassword, name, handleName, reg, errors, loading} = useReg(setMe)
 
   return (
     <Card style={{ width: 320, margin:'0 auto', marginTop:'1em' }}>
+      <Errors errors={ errors } />
       <Form
         name="basic"
         labelCol={{ span: 8 }}
@@ -44,7 +47,7 @@ const Reg = ({me, setMe}) => {
         <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
           <Space direction="vertical">
             <Button type="primary" htmlType="submit" onClick={reg}>
-              Зарегистрироваться
+              <Loading loading={ loading }>Зарегистрироваться</Loading>
             </Button>
             <Link to="/login">
               Вход
