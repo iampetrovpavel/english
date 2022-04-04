@@ -2,10 +2,10 @@ const { ServiceBroker } = require("moleculer");
 const DbService = require("moleculer-db");
 const MongooseAdapter = require("moleculer-db-adapter-mongoose");
 const { MoleculerClientError } = require("moleculer").Errors;
-const mongoose = require("mongoose");
 const { compare, genSalt, hash } =  require('bcryptjs')
 const jwt = require("jsonwebtoken");
 const { EMAIL_PASSWORD_ERROR, EMAIL_EXIST_ERROR, USER_NOT_FOUND } = require('./constants')
+const { usersModel } = require('./models/users.model')
 
 const broker = new ServiceBroker({
     nodeID: "node-users",
@@ -20,21 +20,30 @@ broker.createService({
 
     adapter: new MongooseAdapter(mongo_link),
 
-    model: mongoose.model("User", mongoose.Schema({
-        name: { type: String },
-        email: { type: String, unique: true },
-        password: { type: String},
-        createdAt: { type: Date, default: Date.now},
-        groups: {type: [String]}
-    })),
+    model: usersModel,
 
     settings: {
-        fields: ["_id", "name", "email", "groups", "createdAt"],
+        fields: ["id", "name", "email", "groups", "createdAt, tolearn"],
         entityValidator: {
 			name: "string",
             email: "string",
             password: "string"
 		},
+    },
+
+    events: {
+        async "translate.created"(ctx){
+            console.log("Users got message translate.created with params ", ctx.params)
+            if(!ctx.params.user)return;
+            const user = await this.adapter.findById(ctx.params.user.id)
+            const exist = user.tolearn.find(e=>(
+                e.wordId==ctx.params.word.id && e.translateId==ctx.params.translate.id
+            ))
+            if(exist)return;
+            user.tolearn.push({wordId: ctx.params.word.id, translateId: ctx.params.translate.id})
+            await user.save()
+            console.log("UPDATED USER ", user.toJSON())
+        }
     },
 
     hooks: {
@@ -52,6 +61,17 @@ broker.createService({
 
 
     actions: {
+        learned: {
+            params: {
+                id: {type: "string"}
+            },
+            async handler(ctx) {
+                const user = await this.adapter.findById(ctx.meta.user.id)
+                user.tolearn.pull({_id: ctx.params.id})
+                await user.save()
+                return user.tolearn;
+            }
+        },
         wellcome: {
             rest: "POST /users/login",
             params: {
@@ -133,7 +153,7 @@ broker.createService({
             const isCorrectPassword = await compare(password, user.password)
 
             if(!isCorrectPassword) return null
-            return { _id: user._id, email: user.email, groups: user.groups, name: user.name }
+            return { id: user.id, email: user.email, groups: user.groups, name: user.name }
         },
         async validateEmail(email) {
             const user = await this.adapter.findOne({email})

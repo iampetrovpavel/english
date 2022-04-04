@@ -1,0 +1,10 @@
+POST https://test.ru/api/translates/find
+Content-Type: application/json
+
+###
+POST https://test.ru/api/users/learned
+Content-Type: application/json
+
+{
+    "id": "624b75ccff9e10008a483fe6" 
+}

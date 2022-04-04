@@ -28,22 +28,8 @@ spec:
       restartPolicy: Always
       volumes:
         - name: mongo-data
-          persistentVolumeClaim:
-            claimName: mongo-data
----
-
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: mongo-data
-  labels:
-    name: mongo-data
-spec:
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 100Mi
+          hostPath:
+            path: "/tmp/mongo/english-users"
 ---
 
 apiVersion: v1
