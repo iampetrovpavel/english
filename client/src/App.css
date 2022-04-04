@@ -1,6 +1,8 @@
 html, body {
     background-color: #f0f2f5;
+    overflow: hidden;
 }
+
 
 @media screen and (-webkit-min-device-pixel-ratio:0) { 
     select,
