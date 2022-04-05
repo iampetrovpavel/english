@@ -23,7 +23,7 @@ broker.createService({
     model: usersModel,
 
     settings: {
-        fields: ["id", "name", "email", "groups", "createdAt, tolearn"],
+        fields: ["id", "name", "email", "groups", "createdAt", "tolearn"],
         entityValidator: {
 			name: "string",
             email: "string",
@@ -70,6 +70,20 @@ broker.createService({
                 user.tolearn.pull({_id: ctx.params.id})
                 await user.save()
                 return user.tolearn;
+            }
+        },
+        words: {
+            async handler(ctx) {
+                const { page = 1, pageSize = 3} = ctx.params;
+                const result = await this.adapter.model.aggregate([
+                    {$match: {email: ctx.meta.user.email}},
+                    {$project: {
+                        rows: {$slice: ["$tolearn", (page - 1) * pageSize, pageSize]},
+                        total: {$size: "$tolearn"},
+                    }},
+                ])
+                if(Array.isArray(result) && result.length===0)return;
+                return {...result[0], page, pageSize}
             }
         },
         wellcome: {
