@@ -5,8 +5,11 @@ mongoose.plugin(mongoosePaginate);
 
 const wordsSchema = new mongoose.Schema(
     {
-        word: { type: String },
+        value: { type: String },
+        translate: {type: String},
+        translateId: {type: String},
         createdAt: {type: Date, default: Date.now},
+        creatorId: {type: String}
     }, 
     {
         toJSON: {

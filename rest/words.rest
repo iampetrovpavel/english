@@ -31,6 +31,6 @@ POST https://test.ru/api/words/create
 Content-Type: application/json
 
 {
-    "word": "test1221",
-    "translate": "проверка4511"
+    "word": "qqq1",
+    "translate": "www1"
 }

@@ -1,42 +1,29 @@
-import React, { useContext } from "react";
+import React from "react";
 import 'antd/dist/antd.css';
 import './App.css';
 import 'animate.css'
-import { Layout, Menu  } from 'antd';
-import {  UserOutlined   } from '@ant-design/icons';
-const { Header, Content } = Layout;
-import { Route, Routes, Link, Navigate, useNavigate, useLocation } from "react-router-dom";
+import { Layout  } from 'antd';
+const { Content } = Layout;
+import { Route, Routes, Navigate, useNavigate } from "react-router-dom";
 import Reg from "./pages/Reg.jsx";
-import Login from "./pages/Login.jsx";
 import Words from "./pages/Words.jsx";
 import Play from "./pages/Play.jsx";
 import useMe from './hooks/useMe'
+import Header from './components/header.jsx'
+import Wrapper from "./components/wrapper.jsx";
+import getProtectedRoute from './components/protected.jsx'
+import Login from "./pages/Login.jsx";
 
 const App = () => {
     const navigate = useNavigate()
-    const location = useLocation()
     const { me, setMe, exit } = useMe(
         (data)=>{
             setMe(data)
         }, 
         ()=>{ navigate('/login') })
-    const menu = [
-        {link:'/words', name: 'Словарь'},
-        {link:'/play', name: 'Тренировка'}
-    ]
     return (
         <Layout style={{height: '100%', paddingBottom: '1em'}}>
-            <Header style={{padding: 0}}>
-                <Wrapper>
-                    {me && <Menu theme="dark" mode="horizontal" defaultSelectedKeys={location.pathname}>
-                        <Menu.Item key="/words"><Link to="/words">Словарь</Link></Menu.Item>
-                        <Menu.Item key="/play"><Link to="/play">Тренировка</Link></Menu.Item>
-                        <Menu.SubMenu key="sub1" icon={<UserOutlined />} title={me.name}>
-                            <Menu.Item key="9" onClick={exit}>Выход</Menu.Item>
-                        </Menu.SubMenu>
-                    </Menu>}
-                </Wrapper>
-            </Header>
+            <Header me={me} exit={exit}/>
             <Content style={{height: '100%'}}>
                 <Wrapper>
                     <Routes>
@@ -51,19 +38,5 @@ const App = () => {
         </Layout>
     )
 }
-
-function getProtectedRoute(path, Component, user) {
-    if (!user) {
-        return <Route exact path='login' element={<Login/>} />
-    }
-    
-    return <Route exact path={path} element={<Component/>} />;
-}
-
-const Wrapper = ({children}) => (
-    <div style={{maxWidth: '1024px', margin: '0 auto', height:'100%', padding: '0 1em', position: 'relative', overflow:'hidden'}}>
-        {children}
-    </div>
-)
 
 export default App;

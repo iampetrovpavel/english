@@ -9,50 +9,55 @@ module.exports = {
     adapter: new MongooseAdapter(process.env.MONGO_URI+'/'+process.env.MONGO_DB),
     model: wordsModel,
     settings: {
-        fields: ["id", "word", "createdAt", "version"],
+        fields: ["id", "value", "createdAt", "version", "creatorId", "translate", "translateId"],
+    },
+    events: {
+        async "word.added"(ctx){
+            console.log("Words got message word.added with params ", ctx.params)
+            let word = await this.adapter.model.findOne({
+                value: ctx.params.word.value,
+                translate: ctx.params.translate.value
+            })
+            if(!word){
+                word = await this.adapter.model.create({
+                    _id: ctx.params.word.id,
+                    value: ctx.params.word.value,
+                    translate: ctx.params.translate.value,
+                    translateId: ctx.params.translate.id,
+                    creatorId: ctx.params.user.id
+                })
+            } else console.log("WORD EXIST")
+            ctx.broker.emit('word.created', { 
+                word: word.toJSON(),
+                translate: ctx.params.translate,
+                user: ctx.params.user
+            })
+        }
     },
     actions: {
         create: {
             params: {
-                word: {type: "string"},
-                translate: {type: "string"}
+                word: {type: "string", min: 1, max: 30},
+                translate: {type: "string", min: 1, max: 30}
             },
             async handler(ctx){
-                let word = await this.adapter.model.findOne({word: ctx.params.word})
+                let word = await this.adapter.model.findOne({value: ctx.params.word})
                 if(!word){
-                    word = await this.adapter.model.create({word: ctx.params.word})
+                    word = await this.adapter.model.create({
+                        value: ctx.params.word,
+                        translate: ctx.params.translate,
+                        creatorId: ctx.meta.user
+                    })
                 }
+                console.log('word', word)
                 ctx.broker.emit('word.created', { 
                     word: word.toJSON(), 
                     translate: ctx.params.translate,
-                    user: ctx.meta.user
+                    user: ctx.meta.user,
                 })
                 return word;
             }
         },
-        // list: {
-        //     auth: "required",
-        //     params: {
-        //         page: Number
-        //     },
-        //     handler(ctx){
-        //         const { page = 1 } = ctx.params;
-        //         const myCustomLabels = {
-        //             totalDocs: 'total',
-        //             docs: 'rows',
-        //             limit: 'pageSize',
-        //             page: 'page',
-        //             totalPages: 'totalPages',
-        //         };
-        //         const options = {
-        //             sort: {'createdAt': -1},
-        //             page,
-        //             limit: 10,
-        //             customLabels: myCustomLabels,
-        //         };
-        //         return this.adapter.model.paginate({}, options)
-        //     }
-        // },
         async random(ctx) {
             return await this.adapter.model.aggregate([
                 { '$sample': {size: 3} }

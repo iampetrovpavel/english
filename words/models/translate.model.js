@@ -4,8 +4,10 @@ const mongoosePaginate = require('mongoose-paginate-v2');
 mongoose.plugin(mongoosePaginate);
 
 const translateSchema = new mongoose.Schema({
-    words: [{type: String}],
-    translate: {type: String},
+    wordId: {type: String},
+    word: {type: String},
+    value: {type: String},
+    creatorId: {type: String},
     createdAt: {type: Date, default: Date.now}
 },{
     toJSON: {

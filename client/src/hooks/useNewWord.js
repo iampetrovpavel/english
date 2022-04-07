@@ -3,9 +3,9 @@ import useRequest from './useRequest'
 
 const useNewWord = (onSuccess) => {
     const [word, setWord] = useState('')
-    const [trans, setTrans] = useState('')
+    const [translate, setTranslate] = useState('')
     const [create, errors, loading] = useRequest({
-        url: '/api/words/create',
+        url: '/api/users/remember',
         method: 'post',
         onSuccess
     })
@@ -13,9 +13,9 @@ const useNewWord = (onSuccess) => {
         setWord(e.target.value)
     }
     function handleTransInput(e){
-        setTrans(e.target.value)
+        setTranslate(e.target.value)
     }
-    return { create, errors, loading, handleWordInput, handleTransInput, word, trans }
+    return { create, errors, loading, handleWordInput, handleTransInput, word, translate }
 }
 
 export default useNewWord;

@@ -84,7 +84,7 @@ const Play = () => {
                             Начать тренировку
                         </Button>
                         :<h3>Осталось { remain } слов{inclination(remain)}</h3>}
-            <Card ref={cardRef} size="small" title={ list[remain?remain-1:0].word } style={{ width: 300, marginTop: '1em', display:remain===0?'none':'block' }} className='animate__animated'>
+            <Card ref={cardRef} size="small" title={ list[remain?remain-1:0].word } style={{ minWidth: '300px', maxWidth: '500px', marginTop: '1em', display:remain===0?'none':'block' }} className='animate__animated'>
                 <Space>
                     <Input ref={inputRef} placeholder="Слово на русском" value={ answer } onChange={ handleAnswerInput }/>
                     {nextButton?<Button type="link" success="true" onClick={ handleNext }>

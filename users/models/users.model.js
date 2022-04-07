@@ -7,8 +7,8 @@ const usersSchema = mongoose.Schema({
     createdAt: { type: Date, default: Date.now},
     groups: {type: [String]},
     tolearn: {type: [{
-        wordId: {type: String},
-        translateId: {type: String},
+        word: {id: String, value: String},
+        translate: {id: String, value: String},
     }], default: []}
 }, {
     toJSON: {

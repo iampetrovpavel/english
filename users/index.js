@@ -6,6 +6,7 @@ const { compare, genSalt, hash } =  require('bcryptjs')
 const jwt = require("jsonwebtoken");
 const { EMAIL_PASSWORD_ERROR, EMAIL_EXIST_ERROR, USER_NOT_FOUND } = require('./constants')
 const { usersModel } = require('./models/users.model')
+const actions = require('./actions')
 
 const broker = new ServiceBroker({
     nodeID: "node-users",
@@ -32,18 +33,22 @@ broker.createService({
     },
 
     events: {
-        async "translate.created"(ctx){
-            console.log("Users got message translate.created with params ", ctx.params)
-            if(!ctx.params.user)return;
-            const user = await this.adapter.findById(ctx.params.user.id)
-            const exist = user.tolearn.find(e=>(
-                e.wordId==ctx.params.word.id && e.translateId==ctx.params.translate.id
-            ))
-            if(exist)return;
-            user.tolearn.push({wordId: ctx.params.word.id, translateId: ctx.params.translate.id})
-            await user.save()
-            console.log("UPDATED USER ", user.toJSON())
-        }
+        // async "translate.created"(ctx){
+        //     console.log("Users got message translate.created with params ", ctx.params)
+        //     if(!ctx.params.user)return;
+        //     const user = await this.adapter.findById(ctx.params.user.id)
+        //     if(!user) throw new MoleculerClientError('Пользователь не найден', 404)
+        //     const exist = user.tolearn.find(e=>(
+        //         e.word.id==ctx.params.word.id && e.translate.id==ctx.params.translate.id
+        //     ))
+        //     if(exist)return;
+        //     user.tolearn.unshift({
+        //         word: {id: ctx.params.word.id, value: ctx.params.word.value}, 
+        //         translate: {id: ctx.params.translate.id, value: ctx.params.translate.value}
+        //     })
+        //     await user.save()
+        //     console.log("UPDATED USER ", user.toJSON())
+        // }
     },
 
     hooks: {
@@ -61,31 +66,7 @@ broker.createService({
 
 
     actions: {
-        learned: {
-            params: {
-                id: {type: "string"}
-            },
-            async handler(ctx) {
-                const user = await this.adapter.findById(ctx.meta.user.id)
-                user.tolearn.pull({_id: ctx.params.id})
-                await user.save()
-                return user.tolearn;
-            }
-        },
-        words: {
-            async handler(ctx) {
-                const { page = 1, pageSize = 3} = ctx.params;
-                const result = await this.adapter.model.aggregate([
-                    {$match: {email: ctx.meta.user.email}},
-                    {$project: {
-                        rows: {$slice: ["$tolearn", (page - 1) * pageSize, pageSize]},
-                        total: {$size: "$tolearn"},
-                    }},
-                ])
-                if(Array.isArray(result) && result.length===0)return;
-                return {...result[0], page, pageSize}
-            }
-        },
+        ...actions,
         wellcome: {
             rest: "POST /users/login",
             params: {
@@ -159,6 +140,37 @@ broker.createService({
         }
     },
     methods: {
+        async saveWord({userId, word, translate, id}){
+            const user = await this.adapter.findById(userId)
+            if(!user) throw new MoleculerClientError('Пользователь не найден', 404)
+            user.tolearn.unshift(undefined)
+            const existItemIndex = user.tolearn.findIndex(exist=>{
+                if(!exist || !exist.word || !exist.word.value)return false;
+                return exist.word.value === word.value && exist.translate.value === translate.value;
+            })
+
+            if(existItemIndex>=0){
+                user.tolearn[0] = user.tolearn[existItemIndex];
+                user.tolearn.splice(existItemIndex, 1)
+            } else {
+                user.tolearn[0] = {
+                    _id: id,
+                    word,
+                    translate
+                }
+            }
+            await user.save()
+            console.log("UPDATED USER ", user)
+        },
+        fixIds(rows){
+            const result = rows.map(row=>{
+                row.id = row._id
+                delete row._id
+                console.log(row)
+                return {id: row._id, ...row}
+            })
+            return result;
+        },
         async validateUser(email, password) {
             const user = await this.adapter.findOne({email})
             if(!user) {

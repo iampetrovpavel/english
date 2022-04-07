@@ -4,27 +4,30 @@ import {DownCircleOutlined} from '@ant-design/icons'
 import useModal from '../hooks/useModal'
 import useWords from "../hooks/useWords";
 import useNewWord from "../hooks/useNewWord";
+import Errors from '../components/errors.jsx'
 
 const Words = () => {
     const { isModalVisible, showModal, handleOk, handleCancel } = useModal()
-    const { words, page, total, fetch, remove } = useWords()
-    const { create, handleWordInput, handleTransInput, word, trans } = useNewWord(successCreate)
+    const { words, page, total, fetch, remove, addWord } = useWords()
+    const { create, handleWordInput, handleTransInput, word, translate, errors: createErrors } = useNewWord(successCreate)
 
-    function successCreate() {
+    function successCreate(data) {
         handleOk()
-        fetch()
+        addWord(data)
+        // fetch()
     }
 
     function handleChangePage(page) {
-        fetch({body: {page}})
+        fetch({body: {page, pageSize: 5}})
     }
 
     function handleCreateWord() {
-        create({body: {word, trans:[trans]}})
+        create({body: {word, translate}})
     }
 
     return (
         <div style={{marginTop:'1em'}} >
+            <Errors errors={createErrors}/>
             <div className="wods-menu">
                 <Button type="primary" success="true" onClick={showModal}>
                     Добавить
@@ -33,12 +36,13 @@ const Words = () => {
             <Modal title="Новое слово" visible={isModalVisible} onOk={handleCreateWord} onCancel={handleCancel}>
                 <Space direction="vertical">
                     <Input placeholder="Слово на английском" value={ word } onChange={ handleWordInput }/>
-                    <Input placeholder="Перевод" value={ trans } onChange={ handleTransInput }/>
+                    <Input placeholder="Перевод" value={ translate } onChange={ handleTransInput }/>
                 </Space>
             </Modal>
-            {words.map(w=><Word key={w._id} item={w} remove={remove}/>)}
+            {words.map(w=><Word key={w.word.id} item={w} remove={remove}/>)}
             <Pagination 
-                defaultCurrent={1} 
+                defaultCurrent={1}
+                pageSize={5}
                 current={page} 
                 total={total} 
                 hideOnSinglePage={true}
@@ -50,10 +54,10 @@ const Words = () => {
 }
 
 const Word = ({item, remove}) => {
-    const {word = '...', trans = [], _id} = item;
+    const {word, translate, id} = item;
     return (
-        <Card size="small" title={word} extra={<More id={_id} remove={remove}/>} style={{ width: 300, marginTop: '1em' }}>
-            {trans.map(t=><p key={t}>{t}</p>)}
+        <Card size="small" title={word?word.value:'???'} extra={<More id={id} remove={remove}/>} style={{ minWidth: 300, marginTop: '1em' }}>
+            {<p>{translate?translate.value:'???'}</p>}
         </Card>
     )
 }
