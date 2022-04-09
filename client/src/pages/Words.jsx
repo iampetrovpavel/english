@@ -26,7 +26,7 @@ const Words = () => {
     }
 
     return (
-        <div style={{marginTop:'1em'}} >
+        <div style={{marginTop:'1em', flexGrow: '1'}} >
             <Errors errors={createErrors}/>
             <div className="wods-menu">
                 <Button type="primary" success="true" onClick={showModal}>

@@ -1,5 +1,9 @@
+const { MoleculerError } = require("moleculer").Errors;
+const { AUTH_ERROR } = require('../constants')
+
 module.exports = {
     async handler(ctx) {
+        if(!ctx.meta.user){ throw new MoleculerError(AUTH_ERROR, 401)}
         const { page = 1, pageSize = 5} = ctx.params;
         const data = await this.adapter.model.aggregate([
             {$match: {email: ctx.meta.user.email}},

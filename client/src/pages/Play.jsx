@@ -23,7 +23,7 @@ const Play = () => {
 
     function handleForgot() {
         inputRef.current.input.classList.add('fail')
-        setAnswer(list[remain-1].trans[0])
+        setAnswer(list[remain-1].translate.value)
         showNextButton(true)
         setStat([...stat, {word: list[remain-1], success: false}])
     }
@@ -58,7 +58,7 @@ const Play = () => {
     function handleAnswerInput(e) {
         if(nextButton)return;
         const value = e.target.value;
-        if( list[remain-1].trans.includes(value)){
+        if( list[remain-1].translate.value === value){
             setStat([...stat, {word: list[remain-1], success: true}])
             inputRef.current.input.classList.add('success')
             setTimeout(()=>{
@@ -84,7 +84,7 @@ const Play = () => {
                             Начать тренировку
                         </Button>
                         :<h3>Осталось { remain } слов{inclination(remain)}</h3>}
-            <Card ref={cardRef} size="small" title={ list[remain?remain-1:0].word } style={{ minWidth: '300px', maxWidth: '500px', marginTop: '1em', display:remain===0?'none':'block' }} className='animate__animated'>
+            <Card ref={cardRef} size="small" title={ list[remain?remain-1:0].word.value } style={{ minWidth: '300px', maxWidth: '500px', marginTop: '1em', display:remain===0?'none':'block' }} className='animate__animated'>
                 <Space>
                     <Input ref={inputRef} placeholder="Слово на русском" value={ answer } onChange={ handleAnswerInput }/>
                     {nextButton?<Button type="link" success="true" onClick={ handleNext }>

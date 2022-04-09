@@ -5,6 +5,7 @@ import {  UserOutlined   } from '@ant-design/icons';
 import { Layout  } from 'antd';
 const { Header } = Layout;
 import Wrapper from "./wrapper.jsx";
+import logoImg from '../assets/imgs/logo.png'
 
 const HeaderMenu = ({me, exit}) => {
     const location = useLocation()
@@ -15,9 +16,18 @@ const HeaderMenu = ({me, exit}) => {
     return (
         <Header style={{padding: 0}}>
             <Wrapper>
-                {me && <Menu theme="dark" mode="horizontal" defaultSelectedKeys={location.pathname}>
-                    <Menu.Item key="/words"><Link to="/words">Словарь</Link></Menu.Item>
-                    <Menu.Item key="/play"><Link to="/play">Тренировка</Link></Menu.Item>
+                <div style={{width: '80px'}}>
+                    <img src={logoImg} width="64" height="64" style={{padding: "4px 4px"}}/>
+                </div>
+            {me && <Menu theme="dark" mode="horizontal" defaultSelectedKeys={location.pathname} 
+                style={{
+                    // minWidth:'300px', 
+                flexGrow: '1'
+            }}
+            >
+                    <Menu.Item key="/words"><Link to="/words">To learn</Link></Menu.Item>
+                    <Menu.Item key="/play"><Link to="/play">Play</Link></Menu.Item>
+                    {/* <Menu.Item key="/dictionary"><Link to="/dictionary">Dictionary</Link></Menu.Item> */}
                     <Menu.SubMenu key="sub1" icon={<UserOutlined />} title={me.name}>
                         <Menu.Item key="9" onClick={exit}>Выход</Menu.Item>
                     </Menu.SubMenu>
