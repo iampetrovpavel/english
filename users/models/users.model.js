@@ -9,7 +9,10 @@ const usersSchema = mongoose.Schema({
     tolearn: {type: [{
         word: {id: String, value: String},
         translate: {id: String, value: String},
-    }], default: []}
+    }], default: [{
+        word: {id: '1', value: 'Wellcome'},
+        translate: {id: '2', value: 'Добро пожаловать'},
+    }]}
 }, {
     toJSON: {
         transform(doc, ret) {

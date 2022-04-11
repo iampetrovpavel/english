@@ -58,7 +58,7 @@ const Play = () => {
     function handleAnswerInput(e) {
         if(nextButton)return;
         const value = e.target.value;
-        const index = list.findIndex(item=>item.translate.value===value)
+        const index = list.findIndex(item=>item.translate.value.toLowerCase()===value.toLowerCase())
         if( index >= 0 ){
             setStat([...stat, {word: list[index], success: true}])
             inputRef.current.input.classList.add('success')
@@ -81,7 +81,7 @@ const Play = () => {
     if(list.length === 0){return <h2 style={{padding:'1em'}}>У вас пока нет ни одного слова в словаре...</h2>}
     return (
         <div style={{paddingTop: '1em', height: '100%', width:'100%'}}>
-            {remain===0?<Button type="link" success="true" onClick={ startNewGame }>
+            {remain===0?<Button type="link" style={{fontSize:'18px'}} onClick={ startNewGame }>
                             Начать тренировку
                         </Button>
                         :<h3>Осталось { remain } слов{inclination(remain)}</h3>}

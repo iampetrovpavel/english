@@ -9,7 +9,7 @@ import Errors from '../components/errors.jsx'
 const Words = () => {
     const { isModalVisible, showModal, handleOk, handleCancel } = useModal()
     const { words, page, total, fetch, remove, addWord } = useWords()
-    const { create, handleWordInput, handleTransInput, word, translate, errors: createErrors } = useNewWord(successCreate)
+    const { create, handleWordInput, handleTransInput, word, translate, errors: createErrors, clearInputs } = useNewWord(successCreate)
 
     const enlargerRef = useRef(null)
 
@@ -19,6 +19,7 @@ const Words = () => {
     }, [words])
 
     function successCreate(data) {
+        clearInputs()
         handleOk()
         enlargerRef.current.style.height = '114px'
         setTimeout(()=>{

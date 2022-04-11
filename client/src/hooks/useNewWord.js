@@ -15,7 +15,11 @@ const useNewWord = (onSuccess) => {
     function handleTransInput(e){
         setTranslate(e.target.value)
     }
-    return { create, errors, loading, handleWordInput, handleTransInput, word, translate }
+    function clearInputs(){
+        setWord('');
+        setTranslate('');
+    }
+    return { create, errors, loading, handleWordInput, handleTransInput, word, translate, clearInputs }
 }
 
 export default useNewWord;

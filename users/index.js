@@ -117,7 +117,7 @@ broker.createService({
                 const user = await this.validateEmail(email)
                 if( user ) throw new MoleculerClientError(EMAIL_EXIST_ERROR, 422);
                 const newUser = await ctx.call('users.create', {email, password, name})
-                const token = this.signJWT({_id: newUser._id, email: newUser.email, groups: newUser.groups})
+                const token = jwt.sign(newUser, process.env.JWT_KEY)
                 ctx.meta.cookies = { token }
                 return { token, email: newUser.email, groups: newUser.groups, name: newUser.name };
             },
