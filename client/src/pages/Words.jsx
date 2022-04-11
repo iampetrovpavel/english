@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import { Card, Button, Modal, Input, Space, Menu, Dropdown, Pagination} from 'antd';
-import {DownCircleOutlined} from '@ant-design/icons'
+import {DownCircleOutlined, DeleteOutlined, AppstoreAddOutlined, LoadingOutlined} from '@ant-design/icons'
 import useModal from '../hooks/useModal'
 import useWords from "../hooks/useWords";
 import useNewWord from "../hooks/useNewWord";
@@ -9,7 +9,7 @@ import Errors from '../components/errors.jsx'
 const Words = () => {
     const { isModalVisible, showModal, handleOk, handleCancel } = useModal()
     const { words, page, total, fetch, remove, addWord } = useWords()
-    const { create, handleWordInput, handleTransInput, word, translate, errors: createErrors, clearInputs } = useNewWord(successCreate)
+    const { create, handleWordInput, handleTransInput, word, translate, errors: createErrors, clearInputs, loading:loadingCreate } = useNewWord(successCreate)
 
     const enlargerRef = useRef(null)
 
@@ -42,12 +42,10 @@ const Words = () => {
     }
 
     return (
-        <div style={{marginTop:'1em', flexGrow: '1'}} >
+        <div style={{flexGrow: '1', position:'relative'}} >
             <Errors errors={createErrors}/>
-            <div className="wods-menu">
-                <Button type="primary" success="true" onClick={showModal}>
-                    Добавить
-                </Button>
+            <div className="add-button" onClick={showModal}>
+                {loadingCreate?<LoadingOutlined />:<AppstoreAddOutlined />}
             </div>
             <Modal title="Новое слово" visible={isModalVisible} onOk={handleCreateWord} onCancel={handleCancel}>
                 <Space direction="vertical">
@@ -55,8 +53,10 @@ const Words = () => {
                     <Input placeholder="Перевод" value={ translate } onChange={ handleTransInput }/>
                 </Space>
             </Modal>
-            <div className="enlarger" ref={enlargerRef}></div>
-            {words.map(w=><Word firstRender = {firstRender} key={w.word.id} item={w} remove={remove}/>)}
+            <div style={{overflow: 'auto'}}>
+                <div className="enlarger" ref={enlargerRef}></div>
+                {words.map(w=><Word firstRender = {firstRender} key={w.word.id} item={w} remove={remove}/>)}
+            </div>
             <Pagination 
                 defaultCurrent={1}
                 pageSize={5}
@@ -102,7 +102,7 @@ const WordMenu = ({remove, id, animateRemove}) => {
         }, 500)
     }
     const menu = <Menu>
-                    <Menu.Item key={1} onClick={handleRemove}>Выучил</Menu.Item>
+                    <Menu.Item key={1} icon={<DeleteOutlined />} onClick={handleRemove}>Выучил</Menu.Item>
                 </Menu>
     return (
         <Dropdown overlay={menu}>

@@ -8,11 +8,12 @@ import Wrapper from "./wrapper.jsx";
 import logoImg from '../assets/imgs/logo.png'
 
 const HeaderMenu = ({me, exit}) => {
+    // const admin = me?me.groups.includes('admin'):false
     const location = useLocation()
-    const menu = [
-        {link:'/words', name: 'Словарь'},
-        {link:'/play', name: 'Тренировка'}
-    ]
+    // const menu = [
+    //     {link:'/words', name: 'Словарь'},
+    //     {link:'/play', name: 'Тренировка'}
+    // ]
     return (
         <Header style={{padding: 0}}>
             <Wrapper>
