@@ -50,6 +50,15 @@ Content-Type: application/json
 }
 
 ###
+POST https://test.ru/api/users/update
+Content-Type: application/json
+
+{
+    "id": "624b6fc3bbdacb00485a1573",
+    "groups": ["admin"]
+}
+
+###
 POST https://test.ru/users/validate
 Content-Type: application/json
 

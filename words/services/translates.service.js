@@ -8,7 +8,7 @@ module.exports = {
     adapter: new MongooseAdapter(process.env.MONGO_URI+'/'+process.env.MONGO_DB),
     model: translateModel,
     settings: {
-        fields: ["id", "word", "wordId", "value", "createdAt", "version", "creatorId"],
+        fields: ["id", "word", "wordId", "value", "createdAt", "version", "creatorId", "checked"],
     },
     events: {
         async "word.created"(ctx){
@@ -30,7 +30,9 @@ module.exports = {
                     word: ctx.params.word,
                     user: ctx.params.user
                 });
-            } else console.log("TRANSLATE EXIST")
+            } else {
+                console.log("TRANSLATE EXIST")
+            }
         }
     }
 }

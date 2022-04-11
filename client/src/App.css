@@ -30,9 +30,27 @@ html, body {
 }
 
 .success {
-    background-color: lightgreen;
+    border-color: #0CF25D;
+    color: #0CF25D;
+}
+
+.success:focus {
+    border-color: #0CF25D;
+    color: #0CF25D;
+    box-shadow: rgba(12, 242, 93, 0.2) 0px 0px 0px 2px
 }
 
 .fail {
-    background-color: #FF4858;
+    border-color: #FF4858;
+    color: #FF4858;
+}
+
+.fail:hover {
+    border-color: #FF4858;
+    color: #FF4858;
+}
+.fail:focus {
+    border: 2px solid #FF4858;
+    color: #FF4858;
+    box-shadow: rgba(255, 72, 88, 0.2) 0px 0px 0px 2px
 }

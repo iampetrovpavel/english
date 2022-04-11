@@ -9,7 +9,8 @@ const wordsSchema = new mongoose.Schema(
         translate: {type: String},
         translateId: {type: String},
         createdAt: {type: Date, default: Date.now},
-        creatorId: {type: String}
+        creatorId: {type: String},
+        checked: {type: Boolean, default: false}
     }, 
     {
         toJSON: {

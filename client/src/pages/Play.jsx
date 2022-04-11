@@ -58,8 +58,11 @@ const Play = () => {
     function handleAnswerInput(e) {
         if(nextButton)return;
         const value = e.target.value;
-        if( list[remain-1].translate.value === value){
-            setStat([...stat, {word: list[remain-1], success: true}])
+        const index = list.findIndex(item=>item.translate.value===value)
+        if( index >= 0 ){
+        // if( list[remain-1].translate.value === value){
+            // setStat([...stat, {word: list[remain-1], success: true}])
+            setStat([...stat, {word: list[index], success: true}])
             inputRef.current.input.classList.add('success')
             setTimeout(()=>{
                 inputRef.current.input.classList.remove('success')

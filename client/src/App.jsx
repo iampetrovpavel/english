@@ -13,6 +13,7 @@ import Header from './components/header.jsx'
 import Wrapper from "./components/wrapper.jsx";
 import getProtectedRoute from './components/protected.jsx'
 import Login from "./pages/Login.jsx";
+import Dic from "./pages/Dic.jsx";
 
 const App = () => {
     const navigate = useNavigate()
@@ -31,6 +32,7 @@ const App = () => {
                         <Route path="reg" element={<Reg me={me} setMe={setMe}/>} />
                         <Route path="login" element={<Login me={me} setMe={setMe}/>}/>
                         { getProtectedRoute('words', Words, me) }
+                        { getProtectedRoute('dic', Dic, me) }
                         { getProtectedRoute('play', Play, me) }
                     </Routes>
                 </Wrapper>

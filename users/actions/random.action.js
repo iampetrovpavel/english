@@ -9,10 +9,6 @@ module.exports = {
         if(user.tolearn.length === 0) throw new MoleculerError(NO_WORDS, 422)
         const count = user.tolearn.length<10?user.tolearn.length:10;
         let i = 0;
-        setTimeout(()=>{
-            i=10000;
-            console.log("WATCHDOG")
-        }, 2000)
         while (i<count){
             var random = user.tolearn[Math.floor(Math.random()*user.tolearn.length)]
             console.log(!result.includes(random), user.tolearn.length)

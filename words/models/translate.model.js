@@ -8,7 +8,8 @@ const translateSchema = new mongoose.Schema({
     word: {type: String},
     value: {type: String},
     creatorId: {type: String},
-    createdAt: {type: Date, default: Date.now}
+    createdAt: {type: Date, default: Date.now},
+    checked: {type: Boolean, default: false}
 },{
     toJSON: {
         transform(doc, ret) {

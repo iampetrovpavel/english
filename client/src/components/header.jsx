@@ -27,7 +27,7 @@ const HeaderMenu = ({me, exit}) => {
             >
                     <Menu.Item key="/words"><Link to="/words">To learn</Link></Menu.Item>
                     <Menu.Item key="/play"><Link to="/play">Play</Link></Menu.Item>
-                    <Menu.Item key="/dictionary"><Link to="/dictionary">Dictionary</Link></Menu.Item>
+                    <Menu.Item key="/dic"><Link to="/dic">Dictionary</Link></Menu.Item>
                     <Menu.SubMenu key="sub1" icon={<UserOutlined />} title={me.name}>
                         <Menu.Item key="9" onClick={exit}>Выход</Menu.Item>
                     </Menu.SubMenu>

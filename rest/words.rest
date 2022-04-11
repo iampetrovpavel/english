@@ -11,7 +11,8 @@ Content-Type: application/json
 
 {
     "page": 1,
-    "sort": "createdAt"
+    "sort": "createdAt",
+    "query": {"checked": false}
 }
 
 ###
