@@ -13,7 +13,7 @@ const useRandomList = () => {
     useEffect(() => {
         fetch();
     }, [])
-    return { list, fetch }
+    return { list, fetch, loading }
 }
 
 export default useRandomList;

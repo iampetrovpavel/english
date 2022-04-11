@@ -58,7 +58,7 @@ const Word = ({ item, remove, translates, admin, removeTranslate, check, checkTr
     const checked = item.checked;
     if(!admin && translates.length === 0)return null;
     return (
-        <Card size="small" style={{ minWidth: 300, marginTop: '1em' }}>
+        <Card size="small" style={{ minWidth: 300, marginTop: '1em' }} >
             <div style={{display:'flex', justifyContent: 'space-between'}}>
                 { value || '???' }
                 { admin &&

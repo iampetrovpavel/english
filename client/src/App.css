@@ -2,7 +2,9 @@ html, body {
     background-color: #f0f2f5;
     /* overflow: hidden; */
 }
-
+hr {
+    border-color: lightgray;
+}
 
 @media screen and (-webkit-min-device-pixel-ratio:0) { 
     select,
@@ -53,4 +55,11 @@ html, body {
     border: 2px solid #FF4858;
     color: #FF4858;
     box-shadow: rgba(255, 72, 88, 0.2) 0px 0px 0px 2px
+}
+
+.enlarger {
+    height: 0;
+    width: 100%;
+    transition: height 400ms;
+    /* background-color: lightblue; */
 }

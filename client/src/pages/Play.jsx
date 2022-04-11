@@ -4,7 +4,7 @@ import { Card, Button, Modal, Input, Space, Menu, Dropdown, Pagination} from 'an
 import useModal from "../hooks/useModal";
 
 const Play = () => {
-    const { list, fetch } = useRandomList()
+    const { list, fetch, loading } = useRandomList()
     const [ remain, setRemain ] = useState(0)
     const [ answer, setAnswer ] = useState('')
     const [ nextButton, showNextButton ] = useState(false)
@@ -60,8 +60,6 @@ const Play = () => {
         const value = e.target.value;
         const index = list.findIndex(item=>item.translate.value===value)
         if( index >= 0 ){
-        // if( list[remain-1].translate.value === value){
-            // setStat([...stat, {word: list[remain-1], success: true}])
             setStat([...stat, {word: list[index], success: true}])
             inputRef.current.input.classList.add('success')
             setTimeout(()=>{
@@ -80,23 +78,26 @@ const Play = () => {
         if(num===2 || num===3 || num===4)return 'а'
         return null
     }
-    if(list.length === 0){return <h1>Loading...</h1>}
+    if(list.length === 0){return <h2 style={{padding:'1em'}}>У вас пока нет ни одного слова в словаре...</h2>}
     return (
-        <div style={{paddingTop: '1em', height: '100%'}}>
+        <div style={{paddingTop: '1em', height: '100%', width:'100%'}}>
             {remain===0?<Button type="link" success="true" onClick={ startNewGame }>
                             Начать тренировку
                         </Button>
                         :<h3>Осталось { remain } слов{inclination(remain)}</h3>}
-            <Card ref={cardRef} size="small" title={ list[remain?remain-1:0].word.value } style={{ minWidth: '300px', maxWidth: '500px', marginTop: '1em', display:remain===0?'none':'block' }} className='animate__animated'>
-                <Space>
-                    <Input ref={inputRef} placeholder="Слово на русском" value={ answer } onChange={ handleAnswerInput }/>
+            <Card ref={cardRef} size="small" title={ list[remain?remain-1:0].word.value } 
+                style={{width: '100%', maxWidth: '500px', marginTop: '1em', display:remain===0?'none':'block' }} 
+                className='animate__animated'
+            >
+                <div style={{display:'flex', justifyContent: 'space-between'}}>
+                    <Input ref={inputRef} style={{maxWidth:'200px'}} placeholder="Слово на русском" value={ answer } onChange={ handleAnswerInput }/>
                     {nextButton?<Button type="link" success="true" onClick={ handleNext }>
                         Дальше
                     </Button>
                     :<Button type="link" success="true" onClick={ handleForgot }>
                         Не помню
                     </Button>}
-                </Space>
+                </div>
             </Card>
             <Modal title="Результаты" visible={isModalVisible} onCancel={handleCancel} footer={[
                 <Button key={1} type="link" success="true" onClick={ startNewGame }>
@@ -104,8 +105,8 @@ const Play = () => {
                 </Button>
             ]}>
                 <Space direction="vertical">
-                    Правильных ответов: {stat.filter(item=>item.success).length}
-                    Неправильных ответов: {stat.filter(item=>!item.success).length}
+                    <p>Правильных ответов: {stat.filter(item=>item.success).length}</p>
+                    <p>Неправильных ответов: {stat.filter(item=>!item.success).length}</p>
                 </Space>
             </Modal>
         </div>

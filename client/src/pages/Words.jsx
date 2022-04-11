@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { Card, Button, Modal, Input, Space, Menu, Dropdown, Pagination} from 'antd';
 import {DownCircleOutlined} from '@ant-design/icons'
 import useModal from '../hooks/useModal'
@@ -11,13 +11,28 @@ const Words = () => {
     const { words, page, total, fetch, remove, addWord } = useWords()
     const { create, handleWordInput, handleTransInput, word, translate, errors: createErrors } = useNewWord(successCreate)
 
+    const enlargerRef = useRef(null)
+
+    const firstRender = useRef(true)
+    useEffect(()=>{
+        if(words.length>0)firstRender.current = false;
+    }, [words])
+
     function successCreate(data) {
         handleOk()
-        addWord(data)
-        // fetch()
+        enlargerRef.current.style.height = '114px'
+        setTimeout(()=>{
+            enlargerRef.current.style.display = 'none'
+            enlargerRef.current.style.height = '0px'
+            setTimeout(()=>{
+                enlargerRef.current.style.display = 'block'
+            }, 300)
+            addWord(data)
+        }, 400)
     }
 
     function handleChangePage(page) {
+        firstRender.current = true;
         fetch({body: {page, pageSize: 5}})
     }
 
@@ -39,7 +54,8 @@ const Words = () => {
                     <Input placeholder="Перевод" value={ translate } onChange={ handleTransInput }/>
                 </Space>
             </Modal>
-            {words.map(w=><Word key={w.word.id} item={w} remove={remove}/>)}
+            <div className="enlarger" ref={enlargerRef}></div>
+            {words.map(w=><Word firstRender = {firstRender} key={w.word.id} item={w} remove={remove}/>)}
             <Pagination 
                 defaultCurrent={1}
                 pageSize={5}
@@ -53,21 +69,39 @@ const Words = () => {
     )
 }
 
-const Word = ({item, remove}) => {
+const Word = ({item, remove, firstRender}) => {
+    const wordRef = useRef()
+    function animateRemove() {
+        firstRender.current = true;
+            wordRef.current.classList.remove("animate__bounceInLeft")
+            wordRef.current.classList.add("animate__backOutLeft")
+    }
+    useEffect(()=>{
+        if(!firstRender.current){
+            wordRef.current.classList.add("animate__bounceInLeft")
+        }
+    },[])
     const {word, translate, id} = item;
     return (
-        <Card size="small" title={word?word.value:'???'} extra={<More id={id} remove={remove}/>} style={{ minWidth: 300, marginTop: '1em' }}>
+        <Card className="animate__animated" ref={wordRef} size="small" title={word?word.value:'???'} 
+            extra={<WordMenu animateRemove = { animateRemove } id={id} remove={remove}/>} 
+            style={{ minWidth: 300, marginTop: '1em' }}
+        >
             {<p>{translate?translate.value:'???'}</p>}
         </Card>
     )
 }
 
-const More = ({remove, id}) => {
+const WordMenu = ({remove, id, animateRemove}) => {
+    console.log()
     function handleRemove() {
-        remove({body:{id}})
+        animateRemove()
+        setTimeout(()=>{
+            remove({body:{id}})
+        }, 500)
     }
     const menu = <Menu>
-                    <Menu.Item key={1} danger onClick={handleRemove}>Удалить</Menu.Item>
+                    <Menu.Item key={1} onClick={handleRemove}>Выучил</Menu.Item>
                 </Menu>
     return (
         <Dropdown overlay={menu}>

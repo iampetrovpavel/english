@@ -28,7 +28,7 @@ const useWords = () => {
     
     const {rows:words = [], total = 0, page = 1, pageSize = 10} = data;
 
-    return {words, total, page, pageSize, fetch, remove, errors, loading, addWord}
+    return {words, total, page, pageSize, fetch, remove, errors, loading, addWord }
 }
 
 export default useWords;
