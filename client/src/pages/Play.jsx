@@ -61,7 +61,7 @@ const Play = () => {
         const value = e.target.value;
         const index = list.findIndex(item=>(
             item.translate.value.toLowerCase()=== value.toLowerCase()
-            && item.word.value.toLowerCase() === list[remain?remain-1:0].word.value
+            && item.word.value.toLowerCase() === list[remain?remain-1:0].word.value.toLowerCase()
         ))
         if( index >= 0 ){
             setStat([...stat, {word: list[index], success: true}])
