@@ -21,7 +21,7 @@ const Words = () => {
     function successCreate(data) {
         clearInputs()
         handleOk()
-        enlargerRef.current.style.height = '114px'
+        enlargerRef.current.style.height = '135px'
         setTimeout(()=>{
             enlargerRef.current.style.display = 'none'
             enlargerRef.current.style.height = '0px'
@@ -45,7 +45,10 @@ const Words = () => {
         <div style={{flexGrow: '1', position:'relative'}} >
             <Errors errors={createErrors}/>
             <div className="add-button" onClick={showModal}>
-                {loadingCreate?<LoadingOutlined />:<AppstoreAddOutlined />}
+                {loadingCreate?<LoadingOutlined />:<>NEW</>}
+            </div>
+            <div className="add-button-back" onClick={showModal}>
+                {loadingCreate?<LoadingOutlined />:<>NEW</>}
             </div>
             <Modal title="Новое слово" visible={isModalVisible} onOk={handleCreateWord} onCancel={handleCancel}>
                 <Space direction="vertical">
@@ -72,24 +75,31 @@ const Words = () => {
 
 const Word = ({item, remove, firstRender}) => {
     const wordRef = useRef()
+    const enlargerRef = useRef()
     function animateRemove() {
         firstRender.current = true;
-            wordRef.current.classList.remove("animate__bounceInLeft")
-            wordRef.current.classList.add("animate__backOutLeft")
+        wordRef.current.classList.remove("animate__bounceInLeft")
+        wordRef.current.classList.add("animate__backOutLeft")
+        wordRef.current.style.height = '0px'
+        wordRef.current.style.margin = '0px'
     }
     useEffect(()=>{
+        wordRef.current.style.height = '125px'
         if(!firstRender.current){
             wordRef.current.classList.add("animate__bounceInLeft")
         }
     },[])
     const {word, translate, id} = item;
     return (
-        <Card className="animate__animated" ref={wordRef} size="small" title={word?word.value:'???'} 
-            extra={<WordMenu animateRemove = { animateRemove } id={id} remove={remove}/>} 
-            style={{ minWidth: 300, marginTop: '1em' }}
-        >
-            {<p>{translate?translate.value:'???'}</p>}
-        </Card>
+        <>
+            <div className="enlarger" ref={enlargerRef}></div>
+            <Card className="animate__animated height-transition" ref={wordRef} title={word?word.value:'???'} 
+                extra={<WordMenu animateRemove = { animateRemove } id={id} remove={remove}/>} 
+                style={{ minWidth: 300, marginTop: '1em' }}
+            >
+                {<p>{translate?translate.value:'???'}</p>}
+            </Card>
+        </>
     )
 }
 
@@ -99,14 +109,14 @@ const WordMenu = ({remove, id, animateRemove}) => {
         animateRemove()
         setTimeout(()=>{
             remove({body:{id}})
-        }, 500)
+        }, 900)
     }
     const menu = <Menu>
                     <Menu.Item key={1} icon={<DeleteOutlined />} onClick={handleRemove}>Выучил</Menu.Item>
                 </Menu>
     return (
         <Dropdown overlay={menu}>
-            <DownCircleOutlined />
+            <DownCircleOutlined style={{fontSize: '18px', color: '#1890ff'}}/>
         </Dropdown>
     )
 }

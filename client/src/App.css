@@ -2,12 +2,13 @@ html, body {
     background-color: #f0f2f5;
     /* overflow: hidden; */
 }
-hr {
-    border-color: lightgray;
-}
+
 
 /* #root {
     height: 100%;
+} */
+/* input {
+    border-radius: 1em !important;
 } */
 
 @media screen and (-webkit-min-device-pixel-ratio:0) { 
@@ -68,7 +69,24 @@ hr {
     /* background-color: lightblue; */
 }
 
+.add-button-back {
+    color: #1890ff;
+    position: fixed;
+    right: 12%;
+    bottom: 50px;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    font-size: 26px;
+    font-weight: 800;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1;
+    transition: all 300ms;
+}
 .add-button {
+    font-weight: 800;
     position: fixed;
     right: 12%;
     bottom: 50px;
@@ -77,7 +95,8 @@ hr {
     background-color: #1890ff;
     border-radius: 50%;
     color: white;
-    font-size: 40px;
+    font-size: 26px;
+    overflow: hidden;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -85,14 +104,48 @@ hr {
     -webkit-box-shadow: 4px 4px 8px 5px rgba(34, 60, 80, 0.2);
     -moz-box-shadow: 4px 4px 8px 5px rgba(34, 60, 80, 0.2);
     box-shadow: 4px 4px 8px 5px rgba(34, 60, 80, 0.2);
-    z-index: 1;
+    z-index: 2;
     transition: all 300ms;
 }
 .add-button:hover {
     width: 75px;
     height: 75px;
     background-color: #0071da;
+    font-weight: 900;
+    font-size: 66px;
     -webkit-box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.18);
     -moz-box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.18);
     box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.18);
+}
+
+.add-button:hover ~ .add-button-back{
+    width: 75px;
+    height: 75px;
+    color: #0071da;
+    font-weight: 900;
+    font-size: 66px;
+    -webkit-box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.18);
+    -moz-box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.18);
+    box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.18);
+}
+
+.ant-card-bordered {
+    border-radius: 0.8em;
+    border: 1px solid #1890ff;
+}
+
+.ant-modal-content {
+    border-radius: 1em;
+}
+
+.ant-modal-header {
+    border-radius: 1em 1em 0 0;
+}
+
+.ant-card-small > .ant-card-head {
+    font-size: 18px;
+}
+
+.height-transition {
+    transition: height 500ms;
 }

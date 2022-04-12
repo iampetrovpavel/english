@@ -1,7 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import useRandomList from "../hooks/useRandomList";
-import { Card, Button, Modal, Input, Space, Menu, Dropdown, Pagination} from 'antd';
+import { Card, Button, Modal, Input, Space, Typography, Alert} from 'antd';
 import useModal from "../hooks/useModal";
+const { Text } = Typography;
 
 const Play = () => {
     const { list, fetch, loading } = useRandomList()
@@ -58,7 +59,10 @@ const Play = () => {
     function handleAnswerInput(e) {
         if(nextButton)return;
         const value = e.target.value;
-        const index = list.findIndex(item=>item.translate.value.toLowerCase()===value.toLowerCase())
+        const index = list.findIndex(item=>(
+            item.translate.value.toLowerCase()=== value.toLowerCase()
+            && item.word.value.toLowerCase() === list[remain?remain-1:0].word.value
+        ))
         if( index >= 0 ){
             setStat([...stat, {word: list[index], success: true}])
             inputRef.current.input.classList.add('success')
@@ -81,10 +85,10 @@ const Play = () => {
     if(list.length === 0){return <h2 style={{padding:'1em'}}>У вас пока нет ни одного слова в словаре...</h2>}
     return (
         <div style={{paddingTop: '1em', height: '100%', width:'100%'}}>
-            {remain===0?<Button type="link" style={{fontSize:'18px'}} onClick={ startNewGame }>
+            {remain===0?<Button type="primary"  onClick={ startNewGame }>
                             Начать тренировку
                         </Button>
-                        :<h3>Осталось { remain } слов{inclination(remain)}</h3>}
+                        :<h3 style={{color: '#096dd9'}}>Осталось { remain } слов{inclination(remain)}</h3>}
             <Card ref={cardRef} size="small" title={ list[remain?remain-1:0].word.value } 
                 style={{width: '100%', maxWidth: '500px', marginTop: '1em', display:remain===0?'none':'block' }} 
                 className='animate__animated'
@@ -99,6 +103,7 @@ const Play = () => {
                     </Button>}
                 </div>
             </Card>
+            <Stat stat = {stat}/>
             <Modal title="Результаты" visible={isModalVisible} onCancel={handleCancel} footer={[
                 <Button key={1} type="link" success="true" onClick={ startNewGame }>
                     Еще раз
@@ -110,6 +115,19 @@ const Play = () => {
                 </Space>
             </Modal>
         </div>
+    )
+}
+
+const Stat = ({stat}) => {
+    return (
+        <div style={{marginTop: '1em', display: 'flex'}}>
+            {stat.map((s)=>(
+                s.success?
+                    <Alert style={{marginRight: '1em'}} message={s.word.word.value} type="success" />
+                    :<Alert style={{marginRight: '1em'}} message={s.word.word.value} type="error" />
+            ))}
+        </div>
+
     )
 }
 
